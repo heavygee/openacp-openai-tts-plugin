@@ -165,6 +165,37 @@ gh api -X PUT "repos/$OWNER/$REPO/actions/permissions/workflow" \
   -F can_approve_pull_request_reviews=true
 ```
 
+## Bootstrap state (recorded 2026-06-11, repo still **private**)
+
+| Control | API call result | State |
+|---------|----------------|-------|
+| `vulnerability-alerts` PUT | 204 (silent) | enabled |
+| `automated-security-fixes` PUT | 204 (silent) | enabled |
+| `private-vulnerability-reporting` PUT | 404 | unavailable on free private (revisit after public flip) |
+| `secret_scanning.status: enabled` PATCH | 422 "not available" | unavailable on free private (GitHub-hosted secret scanning + push protection require public OR paid private) |
+| `dependabot_security_updates: enabled` PATCH | applied via `security_and_analysis` | enabled |
+| `actions/permissions/workflow` PUT (write + can_approve_pull_request_reviews) | 204 | enabled (lets release-please open PRs) |
+| Branch protection on `main` | 403 "Upgrade to GitHub Pro or make this repository public" | unavailable on free private (revisit after public flip) |
+| Repo-level merge controls (squash-only, delete-branch-on-merge, PR_TITLE/BODY squash format) | applied | configured |
+| `allow_auto_merge` | API call returns true but state stays false on free private | uses label-based **`merge-on-green`** job in `ci.yml` instead (operator opts in by adding the `automerge` label to a PR) |
+| Labels synced (`labels.yml` workflow) | success | 21 labels including triage / server-* / automerge |
+
+The free-private gap-fillers in this repo:
+
+- **secret-scan job in `ci.yml`** (gitleaks Docker, PR-diff-aware) covers
+  CI-side scanning until public flip enables GitHub's hosted secret
+  scanning + push protection.
+- **Husky `pre-commit` hook** (`scripts/gitleaks-staged.sh`) covers the
+  local staged-content path - hooks can be skipped with `--no-verify`,
+  the CI job is the safety net.
+- **`merge-on-green` job in `ci.yml`** mimics the auto-merge UX without
+  branch protection: label `automerge` on a PR, the job squash-merges
+  it once `ci` is green.
+
+After flipping to public (operator decision before first npm publish):
+re-run the gh-api block above; the calls that returned 422 / 403 / 404
+should succeed.
+
 ## Last reviewed
 
-- Bootstrap: 2026-06-11
+- Bootstrap: 2026-06-11 (private; CI green; labels synced; release-please PR open as #3)
