@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.1](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.0...v1.0.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **ci:** correct semgrep rule YAML quoting and exclude provider.ts from arbitrary-file-read warning ([48d3bf2](https://github.com/heavygee/openacp-openai-tts-plugin/commit/48d3bf216dc1fb38f6582c0ee776ce8f3562c340))
+
+
+### Documentation
+
+* **repo-settings:** record Tier H bootstrap state on free private; document free-private gap-fillers ([8cc8dca](https://github.com/heavygee/openacp-openai-tts-plugin/commit/8cc8dcae4aed92de1be26c9971e87a394f8c7c18))
+
+
+### Continuous Integration
+
+* allow manual release-please dispatch and re-fire after enabling Actions PR creation ([e5533b4](https://github.com/heavygee/openacp-openai-tts-plugin/commit/e5533b42019289d56550eeb8e53e917b434a0790))
+* **labels:** grant contents:read permission for private-repo checkout ([d036c69](https://github.com/heavygee/openacp-openai-tts-plugin/commit/d036c69d4b1b585a3a3a2d1564c3201ba7cffa51))
+* **release:** support NPM_TOKEN bootstrap for first publish ([#4](https://github.com/heavygee/openacp-openai-tts-plugin/issues/4)) ([1c3c769](https://github.com/heavygee/openacp-openai-tts-plugin/commit/1c3c7698157d381691330799d19dfcb7cdf7c77d))
+* **secret-scan:** inline gitleaks Docker invocation; tsconfig: enable esModuleInterop; dependabot: ignore major bumps for ts/vitest/@types/node ([ec3e306](https://github.com/heavygee/openacp-openai-tts-plugin/commit/ec3e3064794ea29ee260b74d3aadacaf65ca8934))
+
 ## [1.0.0] - 2026-06-11
 
 ### Added
