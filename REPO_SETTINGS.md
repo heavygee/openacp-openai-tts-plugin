@@ -11,62 +11,49 @@ code itself.
 |---|---|
 | Owner | `heavygee` |
 | `gh` CLI | `gh` (heavygee account) |
-| Visibility | **private** at bootstrap; flip to **public** before first npm publish (operator decision) |
+| Visibility | **public** (flipped 2026-06-11 before first publish) |
 | npm scope | unscoped (`openacp-openai-tts-plugin`) |
 
-**Why private at bootstrap:** the repo is being hardened (CI, secrets
-scanning, governance docs). Flip to public **after** CI is green and
-before the first `v1.0.0` tag - npm Trusted Publishing fully tokenless
-flow needs the workflow to be visible to npm's OIDC verifier; public
-repos also unlock GitHub-hosted secret scanning + push protection
-(free tier doesn't include them on private repos).
+**Why public:** the package is published to npm with `--provenance`
+and the source mirror is the npm dist-tag's source of truth. Public
+also unlocks GitHub-hosted secret scanning + push protection,
+CodeQL default setup, branch protection requiring `ci`, and private
+vulnerability reporting - all of which are free for public repos.
 
 ## Branch protection (`main`)
 
-Status: **deferred until first CI green run** (avoids bootstrap
-chicken-and-egg). Once the first run succeeds:
+Applied 2026-06-11 after first CI green run.
 
-```bash
-gh api -X PUT "repos/heavygee/openacp-openai-tts-plugin/branches/main/protection" --input - <<'EOF'
-{
-  "required_status_checks": {
-    "strict": true,
-    "contexts": ["ci"]
-  },
-  "enforce_admins": false,
-  "required_pull_request_reviews": null,
-  "restrictions": null,
-  "allow_force_pushes": false,
-  "allow_deletions": false,
-  "required_linear_history": true,
-  "required_conversation_resolution": true
-}
-EOF
-```
+| Control | State |
+|---------|-------|
+| Required status checks (strict) | `ci` (aggregate) |
+| `enforce_admins` | false (admin can bypass for emergency direct push) |
+| Required pull request reviews | none (solo project) |
+| Required linear history | true (squash merges only) |
+| Required conversation resolution | true |
+| Allow force pushes | false |
+| Allow deletions | false |
+| Allow auto-merge | true (`gh pr merge --auto --squash` queues until `ci` green) |
+| Automatically delete head branches | true |
+| Squash commit title / message | `PR_TITLE` / `PR_BODY` |
 
-- Require a pull request before merging - planned (allow solo direct push during bootstrap)
-- Require status checks: **`ci`** (aggregate) - planned
-- Require linear history (squash merges only) - planned
-- Allow auto-merge - planned (Settings UI flip)
-- Automatically delete head branches - planned
-- Restrict force pushes - planned
+## GitHub Advanced Security (free for public)
 
-## GitHub Advanced Security
+Applied 2026-06-11 after public flip.
 
-Free private repos have limited surface here. Re-run the runbook below
-**after** flipping to public.
-
-| Control | State (private) | State (after public flip) |
-|---------|----------------|--------------------------|
-| Secret scanning | unavailable on free private | enabled |
-| Secret scanning push protection | unavailable on free private | enabled |
-| CodeQL default setup | unavailable on free private | enabled (`javascript-typescript`, `actions`) |
-| Code Quality (preview) | unavailable | try (`code-quality/setup`); document if 403 |
-| Dependabot alerts | enabled | enabled |
-| Dependabot security updates | enabled | enabled |
-| Dependabot version updates | `.github/dependabot.yml` (npm + github-actions, weekly) | same |
-| Private vulnerability reporting | enabled | enabled |
-| Dependency graph | on by default | on by default |
+| Control | State |
+|---------|-------|
+| Secret scanning | enabled |
+| Secret scanning push protection | enabled |
+| Secret scanning non-provider patterns | API silently disables on PATCH; enable manually via Settings -> Code security if/when needed |
+| Secret scanning validity checks | same |
+| CodeQL default setup | configured (`actions` + `javascript-typescript`) |
+| Code Quality (preview) | API returns 404 "not available for this repository" - GitHub is still rolling Code Quality out; revisit after the public preview opens to all repos |
+| Dependabot alerts | enabled |
+| Dependabot security updates | enabled |
+| Dependabot version updates | `.github/dependabot.yml` (npm + github-actions, weekly; major bumps for `typescript`/`vitest`/`@types/node` ignored) |
+| Private vulnerability reporting | enabled |
+| Dependency graph | on by default |
 
 ## In-repo CI gates
 
@@ -165,37 +152,23 @@ gh api -X PUT "repos/$OWNER/$REPO/actions/permissions/workflow" \
   -F can_approve_pull_request_reviews=true
 ```
 
-## Bootstrap state (recorded 2026-06-11, repo still **private**)
+## Defense-in-depth (CI-side gates, in addition to GitHub UI)
 
-| Control | API call result | State |
-|---------|----------------|-------|
-| `vulnerability-alerts` PUT | 204 (silent) | enabled |
-| `automated-security-fixes` PUT | 204 (silent) | enabled |
-| `private-vulnerability-reporting` PUT | 404 | unavailable on free private (revisit after public flip) |
-| `secret_scanning.status: enabled` PATCH | 422 "not available" | unavailable on free private (GitHub-hosted secret scanning + push protection require public OR paid private) |
-| `dependabot_security_updates: enabled` PATCH | applied via `security_and_analysis` | enabled |
-| `actions/permissions/workflow` PUT (write + can_approve_pull_request_reviews) | 204 | enabled (lets release-please open PRs) |
-| Branch protection on `main` | 403 "Upgrade to GitHub Pro or make this repository public" | unavailable on free private (revisit after public flip) |
-| Repo-level merge controls (squash-only, delete-branch-on-merge, PR_TITLE/BODY squash format) | applied | configured |
-| `allow_auto_merge` | API call returns true but state stays false on free private | uses label-based **`merge-on-green`** job in `ci.yml` instead (operator opts in by adding the `automerge` label to a PR) |
-| Labels synced (`labels.yml` workflow) | success | 21 labels including triage / server-* / automerge |
+The CI-side gates are kept even when GitHub-hosted scanning is enabled,
+so the contracts are version-controlled and reviewed in PRs:
 
-The free-private gap-fillers in this repo:
-
-- **secret-scan job in `ci.yml`** (gitleaks Docker, PR-diff-aware) covers
-  CI-side scanning until public flip enables GitHub's hosted secret
-  scanning + push protection.
+- **`secret-scan` job in `ci.yml`** (gitleaks Docker, PR-diff-aware)
+  catches anything that would slip past push protection's pattern set.
 - **Husky `pre-commit` hook** (`scripts/gitleaks-staged.sh`) covers the
-  local staged-content path - hooks can be skipped with `--no-verify`,
-  the CI job is the safety net.
-- **`merge-on-green` job in `ci.yml`** mimics the auto-merge UX without
-  branch protection: label `automerge` on a PR, the job squash-merges
-  it once `ci` is green.
-
-After flipping to public (operator decision before first npm publish):
-re-run the gh-api block above; the calls that returned 422 / 403 / 404
-should succeed.
+  local staged-content path before the commit even leaves the
+  workstation. Hooks can be skipped with `--no-verify`; the CI job is
+  the safety net.
+- **`owasp-sast` job** (Semgrep + project rules in
+  `security/semgrep/`) blocks merges on OWASP Top 10 + TS/JS patterns
+  that CodeQL doesn't cover.
+- **`merge-on-green` label-driven job** mimics native `--auto` for
+  contributors who don't have permission to enable native auto-merge.
 
 ## Last reviewed
 
-- Bootstrap: 2026-06-11 (private; CI green; labels synced; release-please PR open as #3)
+- 2026-06-11 - public flip + Tier H + branch protection + npm env applied
