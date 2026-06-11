@@ -1,15 +1,28 @@
 {
   "name": "openacp-openai-tts-plugin",
   "version": "1.0.0",
-  "description": "OpenACP plugin — TTS via any OpenAI-compatible /v1/audio/speech endpoint (Kokoro, Chatterbox, AllTalk, F5-TTS, etc.)",
+  "description": "OpenACP plugin - TTS via any OpenAI-compatible /v1/audio/speech endpoint (Kokoro, Chatterbox, AllTalk, F5-TTS, etc.)",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./provider": {
+      "types": "./dist/provider.d.ts",
+      "import": "./dist/provider.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest run",
     "test:watch": "vitest",
+    "secrets:staged": "bash scripts/gitleaks-staged.sh",
+    "owasp:local": "bash scripts/owasp-gate.sh",
+    "prepare": "husky || true",
     "prepublishOnly": "npm run build && npm test"
   },
   "author": "heavygee",
@@ -20,13 +33,18 @@
     "tts",
     "text-to-speech",
     "openai",
+    "openai-compatible",
     "kokoro",
     "chatterbox",
     "alltalk",
+    "f5-tts",
+    "styletts2",
     "local-tts",
-    "speech"
+    "speech",
+    "voice-cloning"
   ],
   "engines": {
+    "node": ">=20",
     "openacp": ">=2026.518.2"
   },
   "peerDependencies": {
@@ -35,18 +53,26 @@
   "devDependencies": {
     "@openacp/plugin-sdk": "2026.518.2",
     "@types/node": "^25.9.3",
+    "husky": "^9.1.7",
     "typescript": "^5.4.0",
     "vitest": "^3.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heavygee/openacp-openai-tts-plugin"
+    "url": "git+https://github.com/heavygee/openacp-openai-tts-plugin.git"
   },
   "homepage": "https://github.com/heavygee/openacp-openai-tts-plugin#readme",
   "bugs": {
     "url": "https://github.com/heavygee/openacp-openai-tts-plugin/issues"
   },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/heavygee"
+  },
   "files": [
-    "dist/"
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ]
 }

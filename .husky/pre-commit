@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+# Husky pre-commit: scan staged content for secrets before allowing
+# the commit. Free-private repos can't lean on GitHub's push-protection,
+# so this is the local fallback. Skip with `git commit --no-verify`
+# at your own risk - CI still runs the full-history secret-scan job.
+
+bash scripts/gitleaks-staged.sh

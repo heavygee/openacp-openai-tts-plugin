@@ -1,0 +1,64 @@
+name: Feature request
+description: Suggest a new capability or improvement.
+title: "[feat]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This plugin is intentionally focused on OpenAI-compatible
+        `/v1/audio/speech` endpoints + the Chatterbox upload variant.
+        Out-of-scope requests (Whisper-style STT, ElevenLabs proprietary
+        APIs, audio post-processing, on-device caching layers, etc.)
+        will likely be closed with `wontfix` - please describe the
+        *underlying need* so we can suggest alternatives if the feature
+        itself doesn't fit.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the operator pain point, not the proposed feature.
+      placeholder: |
+        I'm using Piper which speaks OpenAI's body shape but defaults to
+        port 5000, and the install flow's default of 8880 throws people
+        off; could we pre-populate based on a "server preset" prompt?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: |
+        How would the user experience change? Mock prompt output is welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Why not just point the existing config at the new server, write a sibling plugin, etc.?
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affects
+      multiple: true
+      options:
+        - Install / configure prompts
+        - Standard /v1/audio/speech path
+        - Chatterbox /audio/speech/upload path
+        - Auth headers / API keys
+        - Voice file caching / lifecycle
+        - CI / packaging
+        - Docs only
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-flight
+      options:
+        - label: I searched existing issues for similar requests.
+          required: true
+        - label: I've read the README and confirmed this isn't already possible.
+          required: true

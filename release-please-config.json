@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "6f7ac40ce2df8b8478944573fd1186359f53aca1",
+  "release-type": "node",
+  "include-v-in-tag": true,
+  "include-component-in-tag": false,
+  "changelog-path": "CHANGELOG.md",
+  "bump-minor-pre-major": false,
+  "bump-patch-for-minor-pre-major": false,
+  "draft": false,
+  "prerelease": false,
+  "packages": {
+    ".": {
+      "package-name": "openacp-openai-tts-plugin",
+      "release-type": "node",
+      "changelog-sections": [
+        { "type": "feat",     "section": "Features",                 "hidden": false },
+        { "type": "fix",      "section": "Bug Fixes",                "hidden": false },
+        { "type": "perf",     "section": "Performance Improvements", "hidden": false },
+        { "type": "revert",   "section": "Reverts",                  "hidden": false },
+        { "type": "docs",     "section": "Documentation",            "hidden": false },
+        { "type": "ci",       "section": "Continuous Integration",   "hidden": false },
+        { "type": "test",     "section": "Tests",                    "hidden": true  },
+        { "type": "chore",    "section": "Miscellaneous Chores",     "hidden": true  },
+        { "type": "refactor", "section": "Code Refactoring",         "hidden": true  },
+        { "type": "build",    "section": "Build System",             "hidden": true  },
+        { "type": "style",    "section": "Styles",                   "hidden": true  }
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+# gitleaks configuration - extends the default ruleset.
+# Doc: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Test fixtures / example values that look secret-shaped but aren't."
+paths = [
+  '''(?i)src/__tests__/''',
+  '''(?i)docs/''',
+]
+regexes = [
+  # README example placeholder values
+  '''<token from your provider>''',
+  '''<api[_-]?key>''',
+  '''Bearer <key>''',
+  # Documentation stubs
+  '''sk-test-[a-z0-9]+''',
+  '''api_key_placeholder''',
+]

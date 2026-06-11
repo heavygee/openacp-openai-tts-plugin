@@ -1,8 +1,15 @@
 # openacp-openai-tts-plugin
 
-OpenACP plugin — TTS via any OpenAI-compatible `/v1/audio/speech` endpoint.
+[![ci](https://github.com/heavygee/openacp-openai-tts-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/heavygee/openacp-openai-tts-plugin/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/openacp-openai-tts-plugin.svg)](https://www.npmjs.com/package/openacp-openai-tts-plugin)
+[![license](https://img.shields.io/npm/l/openacp-openai-tts-plugin.svg)](LICENSE)
+[![node](https://img.shields.io/node/v/openacp-openai-tts-plugin.svg)](package.json)
+
+OpenACP plugin - TTS via any OpenAI-compatible `/v1/audio/speech` endpoint.
 
 Works out of the box with **Kokoro**, **AllTalk**, **F5-TTS**, **StyleTTS2**, and any other server that implements the OpenAI audio speech API. Includes an optional **Chatterbox voice-cloning mode** that uses the `/audio/speech/upload` multipart endpoint for servers that need a reference WAV.
+
+Links: [Contributing](CONTRIBUTING.md) - [Security](SECURITY.md) - [Support](SUPPORT.md) - [Changelog](CHANGELOG.md)
 
 ---
 
@@ -81,6 +88,38 @@ Embed these directly in text for expressive output:
 
 ---
 
+## Updating
+
+`npx` caches the resolved package for ~24h; if you run via `openacp` and want
+the latest plugin without reinstalling:
+
+```bash
+openacp plugin update openacp-openai-tts-plugin
+```
+
+Or pin to the latest tagged release:
+
+```bash
+openacp plugin install openacp-openai-tts-plugin@latest
+```
+
+---
+
+## Development
+
+```bash
+git clone https://github.com/heavygee/openacp-openai-tts-plugin.git
+cd openacp-openai-tts-plugin
+npm install
+npm run build && npm test
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contributor flow
+(issue-first workflow, conventional commits, PR checklist, release
+automation via release-please).
+
+---
+
 ## License
 
-MIT
+MIT - see [LICENSE](LICENSE).

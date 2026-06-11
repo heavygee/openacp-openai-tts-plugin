@@ -1,0 +1,50 @@
+rules:
+  - id: log-jwt-or-token
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >
+      Don't log the user's API key, bearer token, or full Authorization
+      header. If you need to surface auth state, log only the truncated
+      last 4 chars or a boolean "set / not set".
+    pattern-either:
+      - pattern-regex: 'console\.(log|warn|error|info|debug)\([^)]*(apiKey|api_key|Authorization|Bearer)[^)]*\)'
+      - pattern-regex: 'ctx\.log\.(info|warn|error|debug)\([^)]*(apiKey|api_key|Authorization|Bearer)[^)]*\)'
+
+  - id: hardcoded-bearer-prefix-with-template
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: >
+      Building an Authorization header with string concatenation /
+      template literals is fine when the value is the user-supplied
+      apiKey. But if a literal token slips in (e.g. a debug branch),
+      this catches it. Verify the right-hand side is config-driven.
+    pattern-either:
+      - pattern-regex: 'Authorization["'"'"']?\s*:\s*["'"'"']Bearer\s+[A-Za-z0-9_-]{16,}["'"'"']'
+
+  - id: insecure-tls-bypass
+    languages: [typescript, javascript]
+    severity: ERROR
+    message: >
+      NODE_TLS_REJECT_UNAUTHORIZED=0 disables TLS verification globally
+      for the host process. Do not set this from plugin code; if a user
+      genuinely needs to talk to a self-signed server, document the
+      env-var workaround in the README.
+    pattern-either:
+      - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+      - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+      - pattern: rejectUnauthorized: false
+
+  - id: read-arbitrary-file-from-config
+    languages: [typescript, javascript]
+    severity: WARNING
+    message: >
+      readFile(cfg.voiceFilePath) is intentional for the Chatterbox
+      voice-cloning path. If you add new readFile call sites that take
+      a path from plugin config, audit them for path-traversal /
+      arbitrary-file-read implications and add a test fixture covering
+      a path the user didn't authorize.
+    pattern: readFile($PATH)
+    pattern-not-inside: |
+      class OpenAITTSProvider {
+        ...
+      }
