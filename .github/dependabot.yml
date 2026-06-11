@@ -38,3 +38,12 @@ updates:
           - minor
         exclude-patterns:
           - "@openacp/*"
+    # Major bumps of the toolchain need a tsconfig / vitest config audit;
+    # dependabot can still file them but we'd rather review intentionally.
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vitest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
