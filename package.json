@@ -1,0 +1,52 @@
+{
+  "name": "openacp-openai-tts-plugin",
+  "version": "1.0.0",
+  "description": "OpenACP plugin — TTS via any OpenAI-compatible /v1/audio/speech endpoint (Kokoro, Chatterbox, AllTalk, F5-TTS, etc.)",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "author": "heavygee",
+  "license": "MIT",
+  "keywords": [
+    "openacp",
+    "openacp-plugin",
+    "tts",
+    "text-to-speech",
+    "openai",
+    "kokoro",
+    "chatterbox",
+    "alltalk",
+    "local-tts",
+    "speech"
+  ],
+  "engines": {
+    "openacp": ">=2026.518.2"
+  },
+  "peerDependencies": {
+    "@openacp/cli": ">=2026.518.2"
+  },
+  "devDependencies": {
+    "@openacp/plugin-sdk": "2026.518.2",
+    "@types/node": "^25.9.3",
+    "typescript": "^5.4.0",
+    "vitest": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heavygee/openacp-openai-tts-plugin"
+  },
+  "homepage": "https://github.com/heavygee/openacp-openai-tts-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/heavygee/openacp-openai-tts-plugin/issues"
+  },
+  "files": [
+    "dist/"
+  ]
+}
