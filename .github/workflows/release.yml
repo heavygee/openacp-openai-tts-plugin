@@ -37,8 +37,17 @@ jobs:
             echo "::error::tag $TAG_VERSION does not match package.json $PKG_VERSION"
             exit 1
           fi
-      - name: Publish to npm with provenance (Trusted Publishing / OIDC)
-        run: npm publish --provenance --access public
+      - name: Publish to npm with provenance
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [[ -n "$NPM_TOKEN" ]]; then
+            echo "auth: NPM_TOKEN bootstrap (revert to OIDC after Trusted Publisher is configured on npm)"
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          else
+            echo "auth: Trusted Publishing (OIDC)"
+          fi
+          npm publish --provenance --access public
 
   github-release:
     name: GitHub release
