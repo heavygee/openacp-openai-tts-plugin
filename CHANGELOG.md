@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.2](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.1...v1.0.2) (2026-06-12)
+
+
+### Continuous Integration
+
+* **release:** add publish diagnostics for 404 triage ([#5](https://github.com/heavygee/openacp-openai-tts-plugin/issues/5)) ([3059d89](https://github.com/heavygee/openacp-openai-tts-plugin/commit/3059d89574326ed6c2db2afaa882c86483540363))
+
 ## [1.0.1](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.0...v1.0.1) (2026-06-11)
 
 
