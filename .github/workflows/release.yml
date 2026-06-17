@@ -37,8 +37,8 @@ jobs:
             echo "::error::tag $TAG_VERSION does not match package.json $PKG_VERSION"
             exit 1
           fi
-      - name: Publish to npm (bootstrap - no provenance until Trusted Publisher configured)
-        run: npm publish --access public
+      - name: Publish to npm with provenance
+        run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
