@@ -43,18 +43,14 @@ jobs:
         run: |
           if [[ -n "$NPM_TOKEN" ]]; then
             echo "auth: NPM_TOKEN bootstrap"
-            echo "token length: ${#NPM_TOKEN} (should be ~36+ for granular, ~36 for classic)"
-            echo "token prefix: ${NPM_TOKEN:0:5}... (npm_=granular/classic, ghp_/gho_/ghs_=GitHub token in wrong field!)"
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-            echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
+            export NODE_AUTH_TOKEN="$NPM_TOKEN"
+            # setup-node sets NPM_CONFIG_USERCONFIG to a temp file; ~/.npmrc is ignored
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${NPM_CONFIG_USERCONFIG}"
+            echo "registry=https://registry.npmjs.org/" >> "${NPM_CONFIG_USERCONFIG}"
           else
             echo "auth: Trusted Publishing (OIDC)"
           fi
-          echo "=== npm whoami (verifies token resolves to a user) ==="
-          npm whoami || { echo "::error::npm whoami failed - token is invalid OR can't auth at all"; exit 1; }
-          echo "=== npm access list packages (what this token can write) ==="
-          npm access list packages 2>&1 | head -20 || true
-          echo "=== publish ==="
+          npm whoami || { echo "::error::npm whoami failed"; exit 1; }
           npm publish --provenance --access public
 
   github-release:
