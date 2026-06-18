@@ -166,8 +166,49 @@ subsequent publishes go through OIDC.
    And revoke it on <https://www.npmjs.com/settings/~/tokens>.
 7. Revert `release.yml` to the OIDC-only shape (no `NODE_AUTH_TOKEN`).
 
-From release `v1.0.1` onward, the chain is automatic: merge release-please's
-PR -> tag pushed -> publish -> GitHub Release.
+From release `v1.0.1` onward, the chain is automatic once `RELEASE_PLEASE_PAT`
+is configured (see below): merge release-please's PR -> tag pushed (as your
+user, not the bot) -> `release.yml` fires -> npm publish + GitHub Release.
+
+## Step 5b - `RELEASE_PLEASE_PAT` (one-time, so tags fire `release.yml`)
+
+GitHub deliberately does **not** let `GITHUB_TOKEN` trigger downstream
+workflows. release-please tags with that token, so `release.yml` never
+runs unless you re-push the tag by hand. Fix: give release-please a
+**fine-grained PAT** scoped to this repo only.
+
+**Operator (browser, ~2 min):**
+
+1. <https://github.com/settings/personal-access-tokens/new>
+2. Token name: `openacp-openai-tts-plugin-release-please`
+3. Expiration: 90 days (set a calendar reminder to rotate)
+4. Resource owner: `heavygee`
+5. Repository access: **Only select repositories** -> `openacp-openai-tts-plugin`
+6. Permissions:
+   - **Contents**: Read and write (tags + releases)
+   - **Pull requests**: Read and write (release PR)
+   - **Metadata**: Read-only (required)
+7. Generate token -> copy once
+
+**Wire the secret:**
+
+```bash
+gh secret set RELEASE_PLEASE_PAT --repo heavygee/openacp-openai-tts-plugin --body "github_pat_xxx..."
+```
+
+`.github/workflows/release-please.yml` already references this secret.
+After merge of the next release PR, `release.yml` should start automatically
+with no manual tag re-push.
+
+**Breakglass (if PAT expires mid-release):** delete + recreate the tag via REST
+(same one-liner as hapi-monitor bootstrap):
+
+```bash
+TAG=v1.0.2 OWNER=heavygee REPO=openacp-openai-tts-plugin
+SHA=$(gh api "repos/$OWNER/$REPO/git/refs/tags/$TAG" --jq '.object.sha')
+gh api -X DELETE "repos/$OWNER/$REPO/git/refs/tags/$TAG"
+gh api -X POST "repos/$OWNER/$REPO/git/refs" -f ref="refs/tags/$TAG" -f sha="$SHA"
+```
 
 ## Step 6 - Verify the publish
 
