@@ -35,6 +35,6 @@ jobs:
         with:
           # GITHUB_TOKEN tags do not fire downstream workflows (release.yml).
           # Use a user PAT so tag pushes trigger npm publish. See NPM_SETUP.md.
-          token: ${{ secrets.RELEASE_PLEASE_PAT }}
+          token: ${{ secrets.RELEASE_PAT }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json

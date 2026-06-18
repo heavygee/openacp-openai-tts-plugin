@@ -166,11 +166,11 @@ subsequent publishes go through OIDC.
    And revoke it on <https://www.npmjs.com/settings/~/tokens>.
 7. Revert `release.yml` to the OIDC-only shape (no `NODE_AUTH_TOKEN`).
 
-From release `v1.0.1` onward, the chain is automatic once `RELEASE_PLEASE_PAT`
+From release `v1.0.1` onward, the chain is automatic once `RELEASE_PAT`
 is configured (see below): merge release-please's PR -> tag pushed (as your
 user, not the bot) -> `release.yml` fires -> npm publish + GitHub Release.
 
-## Step 5b - `RELEASE_PLEASE_PAT` (one-time, so tags fire `release.yml`)
+## Step 5b - `RELEASE_PAT` (one-time, so tags fire `release.yml`)
 
 GitHub deliberately does **not** let `GITHUB_TOKEN` trigger downstream
 workflows. release-please tags with that token, so `release.yml` never
@@ -193,7 +193,7 @@ runs unless you re-push the tag by hand. Fix: give release-please a
 **Wire the secret:**
 
 ```bash
-gh secret set RELEASE_PLEASE_PAT --repo heavygee/openacp-openai-tts-plugin --body "github_pat_xxx..."
+gh secret set RELEASE_PAT --repo heavygee/openacp-openai-tts-plugin --body "github_pat_xxx..."
 ```
 
 `.github/workflows/release-please.yml` already references this secret.
