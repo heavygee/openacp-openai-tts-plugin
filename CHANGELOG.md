@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.2](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.1...v1.0.2) (2026-06-18)
+
+
+### Bug Fixes
+
+* **ci:** align release-please secret name to RELEASE_PAT ([94f71c4](https://github.com/heavygee/openacp-openai-tts-plugin/commit/94f71c4dc12600a6b7e9c52dce75791f3539699e))
+
+
+### Continuous Integration
+
+* **release-please:** use RELEASE_PLEASE_PAT so tags fire release.yml ([0ee678d](https://github.com/heavygee/openacp-openai-tts-plugin/commit/0ee678d781f70421dd459fe8038c9b541647a669))
+* **release:** OIDC-only publish after Trusted Publisher bootstrap ([37c5201](https://github.com/heavygee/openacp-openai-tts-plugin/commit/37c5201e99c28b3d78ef77172d91aa4768a3d16e))
+
 ## [1.0.1](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.0...v1.0.1) (2026-06-11)
 
 
