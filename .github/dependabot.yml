@@ -11,6 +11,7 @@ updates:
     labels:
       - dependencies
       - ci
+      - automerge
     commit-message:
       prefix: "ci"
       include: scope
@@ -25,6 +26,7 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - dependencies
+      - automerge
     commit-message:
       prefix: "chore"
       include: scope
