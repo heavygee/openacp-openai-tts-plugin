@@ -241,4 +241,4 @@ Long-lived tokens are a liability; minimise the window they're alive.
 
 ## Last reviewed
 
-- 2026-06-11 - initial setup, bootstrap path documented for v1.0.0
+- 2026-06-17 - v1.0.1 bootstrap complete; Trusted Publisher configured; OIDC-only `release.yml`
