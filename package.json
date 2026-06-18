@@ -1,6 +1,6 @@
 {
   "name": "openacp-openai-tts-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "OpenACP plugin - TTS via any OpenAI-compatible /v1/audio/speech endpoint (Kokoro, Chatterbox, AllTalk, F5-TTS, etc.)",
   "type": "module",
   "main": "dist/index.js",
