@@ -80,8 +80,16 @@ jobs:
       image: semgrep/semgrep:1.122.0
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Semgrep OWASP gate
         run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASELINE_ARGS=(--baseline-ref "${{ github.event.pull_request.base.sha }}")
+          else
+            BASELINE_ARGS=()
+          fi
           semgrep scan \
             --config p/owasp-top-ten \
             --config p/typescript \
@@ -89,7 +97,8 @@ jobs:
             --config p/secrets \
             --config security/semgrep/ \
             --error \
-            --metrics off
+            --metrics off \
+            "${BASELINE_ARGS[@]}"
 
   ci:
     name: ci
