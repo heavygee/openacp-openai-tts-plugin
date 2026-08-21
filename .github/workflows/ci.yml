@@ -83,10 +83,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Semgrep OWASP gate
+        shell: bash
         run: |
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASELINE_ARGS=(--baseline-ref "${{ github.event.pull_request.base.sha }}")
+            BASELINE_ARGS=(--baseline-commit "${{ github.event.pull_request.base.sha }}")
           else
             BASELINE_ARGS=()
           fi
