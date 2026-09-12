@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.3](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.2...v1.0.3) (2026-08-21)
+
+
+### Bug Fixes
+
+* **ci:** scope semgrep sast scan to diff against base branch ([#24](https://github.com/heavygee/openacp-openai-tts-plugin/issues/24)) ([c14e6be](https://github.com/heavygee/openacp-openai-tts-plugin/commit/c14e6beeb86415483481f9a79f7c6b72e46323a6))
+
+
+### Continuous Integration
+
+* **dependabot:** auto-merge Dependabot PRs when CI green ([#11](https://github.com/heavygee/openacp-openai-tts-plugin/issues/11)) ([5acf4cf](https://github.com/heavygee/openacp-openai-tts-plugin/commit/5acf4cfd06a926485b8e714c6bab6629d1aeb793))
+* **deps:** bump actions/checkout from 6 to 7 ([#12](https://github.com/heavygee/openacp-openai-tts-plugin/issues/12)) ([a0470a9](https://github.com/heavygee/openacp-openai-tts-plugin/commit/a0470a9bf046ac1edbf40b8a96546997d2ce70e7))
+
 ## [1.0.2](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.1...v1.0.2) (2026-06-18)
 
 
