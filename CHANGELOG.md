@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.5](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.4...v1.0.5) (2026-10-20)
+
+
+### Continuous Integration
+
+* **deps:** bump actions/setup-node from 6.5.0 to 7.1.0 ([#16](https://github.com/heavygee/openacp-openai-tts-plugin/issues/16)) ([2c55919](https://github.com/heavygee/openacp-openai-tts-plugin/commit/2c55919ecfc786a274185de9cc827e3bfabe25d4))
+* **fix:** close major-version auto-merge gap in merge-on-green ([#40](https://github.com/heavygee/openacp-openai-tts-plugin/issues/40)) ([f109de9](https://github.com/heavygee/openacp-openai-tts-plugin/commit/f109de9a7ba1ca865cce1ee473556375ceed934e))
+
 ## [1.0.4](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.3...v1.0.4) (2026-10-20)
 
 
