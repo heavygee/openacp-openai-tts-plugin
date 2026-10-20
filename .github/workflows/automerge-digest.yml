@@ -1,0 +1,65 @@
+name: automerge-digest
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Monday 09:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect PRs merge-on-green merged this week
+        id: collect
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Rolling 7-day window, not tied to the last successful run: if a scheduled
+          # trigger is skipped or delayed (GitHub Actions makes no delivery guarantee
+          # for cron), PRs merged in the gap can fall outside every window and never
+          # appear in any digest. Accepted for an informational digest -- tracking
+          # last-run state would be disproportionate machinery for this.
+          SINCE=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          DELIM="NTFY_EOF_${GITHUB_RUN_ID}_${RANDOM}"
+          gh pr list --repo "${{ github.repository }}" --state merged \
+            --search "merged:>=${SINCE}" \
+            --json number,title,author,labels --limit 300 \
+            | jq '[.[] | select(.author.login == "dependabot[bot]" or ((.labels // []) | map(.name) | index("automerge") != null))]' \
+            > merged.json
+          COUNT=$(jq length merged.json)
+          if [ "$COUNT" -ge 300 ]; then
+            echo "::warning::automerge-digest hit the 300-PR query limit; some merges this week were not counted"
+          fi
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          {
+            echo "summary<<${DELIM}"
+            jq -r '.[] | "#\(.number) \(.title)"' merged.json
+            echo "${DELIM}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Post weekly digest to ntfy
+        if: steps.collect.outputs.count != '0'
+        env:
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          SUMMARY: ${{ steps.collect.outputs.summary }}
+        run: |
+          set -euo pipefail
+          # Deliberate exception to the estate's Investigate-button rule: this is an
+          # informational weekly digest from a GitHub-hosted runner with no tailnet
+          # access to the investigate-trigger secret, posted write-only to a single
+          # publish-only-scoped ntfy user. Wiring a tailnet secret into every repo's
+          # Actions for this would be disproportionate. What's lost: no one-tap hand-off
+          # to a HAPI session from this specific notification -- read it, then go look
+          # if something needs action.
+          curl -fsS \
+            -H "Authorization: Bearer ${NTFY_TOKEN}" \
+            -H "Title: ${{ github.repository }}: ${{ steps.collect.outputs.count }} auto-merged this week" \
+            -H "Priority: low" \
+            -H "Tags: robot" \
+            -d "${SUMMARY}" \
+            "https://ntfy.introvrtlounge.com/dependabot-automerge"
