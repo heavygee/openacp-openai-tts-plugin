@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.6](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.5...v1.0.6) (2026-10-20)
+
+
+### Bug Fixes
+
+* digest filter never matched real dependabot PRs ([#47](https://github.com/heavygee/openacp-openai-tts-plugin/issues/47)) ([6630517](https://github.com/heavygee/openacp-openai-tts-plugin/commit/66305174f6e75d5f84a899abadf2f865e39dfc08))
+
+
+### Continuous Integration
+
+* add weekly auto-merge digest to ntfy ([#46](https://github.com/heavygee/openacp-openai-tts-plugin/issues/46)) ([3e8db80](https://github.com/heavygee/openacp-openai-tts-plugin/commit/3e8db80ac43df060bb402981ca80dbe142360ec5))
+* remove major-version auto-merge gate per operator decision ([#44](https://github.com/heavygee/openacp-openai-tts-plugin/issues/44)) ([10147ca](https://github.com/heavygee/openacp-openai-tts-plugin/commit/10147ca855e5e3e2906ba83de47f36866b053d21))
+
 ## [1.0.5](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.4...v1.0.5) (2026-10-20)
 
 
