@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, labeled]
 
 # Cancel superseded runs on the same PR / branch.
 concurrency:
@@ -131,10 +132,24 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: Dependabot metadata
+        id: metadata
+        if: github.event.pull_request.user.login == 'dependabot[bot]'
+        uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Squash merge labelled PR
+        if: >
+          github.event.pull_request.user.login != 'dependabot[bot]' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr merge "${{ github.event.pull_request.number }}" \
-            --squash --delete-branch \
-            --repo "${{ github.repository }}"
+          set -euo pipefail
+          STATE=$(gh pr view "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" --json state -q .state)
+          if [ "$STATE" = "OPEN" ]; then
+            gh pr merge "${{ github.event.pull_request.number }}" --squash --delete-branch --repo "${{ github.repository }}"
+          else
+            echo "PR already $STATE, skipping"
+          fi
