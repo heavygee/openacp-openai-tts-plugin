@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 > be reverted on the next release PR; if you need to amend an entry,
 > open a follow-up PR with a `docs:` prefix instead.
 
+## [1.0.4](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.3...v1.0.4) (2026-10-20)
+
+
+### Continuous Integration
+
+* pin action refs to SHA to satisfy owasp-sast mutable-tag rule ([#38](https://github.com/heavygee/openacp-openai-tts-plugin/issues/38)) ([283cc0b](https://github.com/heavygee/openacp-openai-tts-plugin/commit/283cc0be110eed5b89c9338a99fd0b201868a568))
+
 ## [1.0.3](https://github.com/heavygee/openacp-openai-tts-plugin/compare/v1.0.2...v1.0.3) (2026-08-21)
 
 
