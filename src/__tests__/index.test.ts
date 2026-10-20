@@ -187,3 +187,4 @@ describe('OpenAITTSProvider (Chatterbox upload mode)', () => {
     expect(result.mimeType).toBe('audio/mpeg')
   })
 })
+this is not valid typescript {{{
