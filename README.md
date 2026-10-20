@@ -123,3 +123,4 @@ automation via release-please).
 ## License
 
 MIT - see [LICENSE](LICENSE).
+<!-- automerge positive control -->
