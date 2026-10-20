@@ -29,7 +29,7 @@ jobs:
           gh pr list --repo "${{ github.repository }}" --state merged \
             --search "merged:>=${SINCE}" \
             --json number,title,author,labels --limit 300 \
-            | jq '[.[] | select(.author.login == "dependabot[bot]" or ((.labels // []) | map(.name) | index("automerge") != null))]' \
+            | jq '[.[] | select(.author.is_bot == true or ((.labels // []) | map(.name) | index("automerge") != null))]' \
             > merged.json
           COUNT=$(jq length merged.json)
           if [ "$COUNT" -ge 300 ]; then
